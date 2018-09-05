@@ -7,7 +7,7 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(tags={"@smoke"}, features = ("src/test/resources/Features"), glue = {
+@CucumberOptions(features = ("src/test/resources/Features"), glue = {
 		"com.GimmalMIR.StepDefination" })
 
 public class TestRunner {

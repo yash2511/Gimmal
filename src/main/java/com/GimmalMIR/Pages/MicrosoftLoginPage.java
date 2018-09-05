@@ -10,9 +10,8 @@ import com.GimmalMIR.core.Testcapture;
 import com.GimmalMIR.core.Testexception;
 import com.GimmalMIR.core.Testfactory;
 
-
 public class MicrosoftLoginPage {
-	
+
 	@FindBy(xpath = "//*[@id='otherTile']/div/div[2]")
 	private WebElement UseAnotherAccount;
 
@@ -36,11 +35,9 @@ public class MicrosoftLoginPage {
 
 	@FindBy(xpath = "//span[text()='Office 365']")
 	private WebElement office365;
-	
-	@FindBy(xpath= "//img[@id='ctl00_onetidHeadbnnr2']")
+
+	@FindBy(xpath = "//img[@id='ctl00_onetidHeadbnnr2']")
 	private WebElement rootSite;
-	
-	
 
 	public MicrosoftLoginPage() {
 		PageFactory.initElements(Testfactory.driver, this);
@@ -49,18 +46,20 @@ public class MicrosoftLoginPage {
 	public void clickLoginbutton(String userName, String passWord) throws InterruptedException {
 		try {
 			Testfactory.editTextBox(SignIn, userName);
-			Testfactory.clickAction(NextButton);
-			
-			Testfactory.editTextBox(Password, passWord);
 			Thread.sleep(2000);
+			Testfactory.clickAction(NextButton);
+			Thread.sleep(3000);
+			Testfactory.editTextBox(Password, passWord);
+			Thread.sleep(3000);
 			Testfactory.clickAction(SignInButton);
+			Thread.sleep(1000);
 			Testfactory.clickAction(YesButton);
 			Thread.sleep(2000);
 		} catch (Testexception e) {
 			e.printStackTrace();
 		}
 
-	}	
+	}
 
 	public void isOffice365PageOpen(String pageName) {
 

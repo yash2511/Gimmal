@@ -1,8 +1,11 @@
 package com.GimmalMIR.StepDefination;
 
+import java.util.concurrent.TimeUnit;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import com.GimmalMIR.Listeners.Report;
+import com.GimmalMIR.Pages.DefaultContentTypeOrderPage;
 import com.GimmalMIR.Pages.EditMIRPage;
 import com.GimmalMIR.Pages.GovernanceHubDashboardPage;
 import com.GimmalMIR.Pages.MIRInstalledSiteURLPage;
@@ -14,6 +17,7 @@ import com.GimmalMIR.Pages.SiteContentsPage;
 import com.GimmalMIR.Pages.SiteSettingsPage;
 import com.GimmalMIR.Utilities.ExcelUtils;
 import com.GimmalMIR.Utilities.TestConfig;
+import com.GimmalMIR.core.Testcapture;
 import com.GimmalMIR.core.Testfactory;
 
 import cucumber.api.Scenario;
@@ -78,17 +82,22 @@ public class MIR {
 	public void Verify_If_Office365_is_opened() throws Throwable {
 		try {
 			MicrosoftLoginPage login = new MicrosoftLoginPage();
-
+			String office365 = Testcapture.capturescreenshot(Testfactory.driver, "Office365");
 			login.isOffice365PageOpen("Office 365");
 			reporter.stepPass(new Object() {
 			}.getClass().getEnclosingMethod().getName());
+			reporter.attachScreenshot(new Object() {
+			}.getClass().getEnclosingMethod().getName(), office365);
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			String office365fail = Testcapture.capturescreenshot(Testfactory.driver, "Office365");
 
 			reporter.stepFail(new Object() {
 			}.getClass().getEnclosingMethod().getName());
 			reporter.exceptionMessage(ExceptionUtils.getStackTrace(e));
+			reporter.attachScreenshot(new Object() {
+			}.getClass().getEnclosingMethod().getName(), office365fail);
 		}
 	}
 
@@ -132,21 +141,29 @@ public class MIR {
 	public void Verify_if_govhub_dashboard_is_open() throws Throwable {
 		try {
 			GovernanceHubDashboardPage govHub = new GovernanceHubDashboardPage();
-			govHub.isDisaplyGovHubDashboard();	
-			
+			govHub.isDisaplyGovHubDashboard();
+			Thread.sleep(2000);
+			String GovHub_DashBoard = Testcapture.capturescreenshot(Testfactory.driver, "GovHubDashBoard");
 			reporter.stepPass(new Object() {
 			}.getClass().getEnclosingMethod().getName());
 
+			reporter.attachScreenshot(new Object() {
+			}.getClass().getEnclosingMethod().getName(), GovHub_DashBoard);
+
 		} catch (Exception e) {
 			e.printStackTrace();
+			String GovHub_DashBoardException = Testcapture.capturescreenshot(Testfactory.driver, "GovHubDashBoard");
 
 			reporter.stepFail(new Object() {
 			}.getClass().getEnclosingMethod().getName());
 			reporter.exceptionMessage(ExceptionUtils.getStackTrace(e));
+
+			reporter.attachScreenshot(new Object() {
+			}.getClass().getEnclosingMethod().getName(), GovHub_DashBoardException);
+
 		}
 	}
-	
-	
+
 	@Given("^User is on MIR rules page$")
 	public void User_is_on_MIR_rules_page() throws Throwable {
 		try {
@@ -154,7 +171,7 @@ public class MIR {
 			GovHubDash.clickOnMIRApp();
 			MetadataInheritanceRulesPage mir = new MetadataInheritanceRulesPage();
 			mir.clickOnallSitesEllipsis();
-		
+
 			reporter.stepPass(new Object() {
 			}.getClass().getEnclosingMethod().getName());
 		} catch (Exception e) {
@@ -174,6 +191,7 @@ public class MIR {
 			EditMIRPage page = new EditMIRPage();
 			mir.clickOneditMetadataInheritanceRules();
 			Testfactory.switchToNewTab(1);
+			Thread.sleep(2000);
 			page.enterTheRuleForm();
 
 			reporter.stepPass(new Object() {
@@ -193,6 +211,52 @@ public class MIR {
 		try {
 			EditMIRPage page = new EditMIRPage();
 			page.verifyCrretedMIRRule();
+			String MIR_Rule = Testcapture.capturescreenshot(Testfactory.driver, "MIR_Rule");
+
+			reporter.stepPass(new Object() {
+			}.getClass().getEnclosingMethod().getName());
+
+			reporter.attachScreenshot(new Object() {
+			}.getClass().getEnclosingMethod().getName(), MIR_Rule);
+
+		} catch (java.lang.AssertionError fail) {
+			fail.printStackTrace();
+			String MIR_Rule_fail = Testcapture.capturescreenshot(Testfactory.driver, "MIR_Rule");
+
+			reporter.stepFail(new Object() {
+			}.getClass().getEnclosingMethod().getName());
+			reporter.exceptionMessage(ExceptionUtils.getStackTrace(fail));
+
+			reporter.attachScreenshot(new Object() {
+			}.getClass().getEnclosingMethod().getName(), MIR_Rule_fail);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			String MIR_Rule_fail = Testcapture.capturescreenshot(Testfactory.driver, "MIR_Rule");
+
+			reporter.stepFail(new Object() {
+			}.getClass().getEnclosingMethod().getName());
+			reporter.exceptionMessage(ExceptionUtils.getStackTrace(e));
+
+			reporter.attachScreenshot(new Object() {
+			}.getClass().getEnclosingMethod().getName(), MIR_Rule_fail);
+
+		}
+	}
+
+	@Then("^Published global configurations settings$")
+	public void Published_global_configurations_settings() throws Throwable {
+		try {
+			Testfactory.switchToNewTab(0);
+			Testfactory.driver.navigate().refresh();
+			EditMIRPage page = new EditMIRPage();
+
+			MetadataInheritanceRulesPage mir = new MetadataInheritanceRulesPage();
+			mir.clickOnallSitesEllipsis();
+			mir.clickOnPublishGlobalConfiguration();
+			Thread.sleep(2000);
+			Testfactory.driver.switchTo().alert().accept();
+			//Thread.sleep(10 * 60 * 1000);
 			reporter.stepPass(new Object() {
 			}.getClass().getEnclosingMethod().getName());
 
@@ -208,11 +272,15 @@ public class MIR {
 	@Given("^User is on MIR installed test site$")
 	public void User_is_on_MIR_installed_test_site() throws Throwable {
 		try {
-			GovernanceHubDashboardPage GovHubDash = new GovernanceHubDashboardPage();
 			MetadataInheritanceRulesPage page = new MetadataInheritanceRulesPage();
-			GovHubDash.clickOnMIRApp();
+
 			page.clickOnallSitesURL();
+
 			Testfactory.switchToNewTab(1);
+			Testfactory.driver.close();
+			Testfactory.switchToNewTab(0);
+			Testfactory.switchToNewTab(1);
+
 			reporter.stepPass(new Object() {
 			}.getClass().getEnclosingMethod().getName());
 		} catch (Exception e) {
@@ -230,11 +298,6 @@ public class MIR {
 		try {
 			MIRInstalledSiteURLPage page = new MIRInstalledSiteURLPage();
 			page.clickOnsiteContents();
-			SiteContentsPage contents = new SiteContentsPage();
-			contents.clickOnclassicView();
-			contents.clickOnaddAnApp();
-			contents.clickOnDocumentLibrary();
-			contents.enterTheLibraryDetails();
 			reporter.stepPass(new Object() {
 			}.getClass().getEnclosingMethod().getName());
 		} catch (Exception e) {
@@ -247,34 +310,87 @@ public class MIR {
 		}
 	}
 
-	@Then("^Verify document library is created on Testsite$")
-	public void Verify_document_library_is_created_on_Testsite() throws Throwable {
+	@When("^User creates the document library$")
+	public void User_creates_the_document_library() throws Throwable {
 		try {
-			SiteContentsPage page = new SiteContentsPage();
-			page.verifyLibraryName();
-			page.clickOnLibrary();
+
+			SiteContentsPage contents = new SiteContentsPage();
+			contents.clickOnclassicView();
+			contents.clickOnaddAnApp();
+			contents.clickOnDocumentLibrary();
+			Thread.sleep(2000);
+			contents.enterTheLibraryDetails();
+			contents.clickOnLibrary();
+
 			MIRLibraryPage lib = new MIRLibraryPage();
 			lib.clickOnLibrary();
+			Thread.sleep(2000);
 			lib.clickOnLibrarySettings();
+
 			lib.clickOnAdvancedSettings();
 			lib.clickOnallowManagedContentTypeChkbx();
 			lib.clickOnokBtn();
 			lib.clickOnaddContentType();
-			lib.clickOnAvialbleSiteContentTypes(ExcelUtils.getSheetData(9, 2 ));
-			lib.clickOnaddContentType();
-			lib.clickOnAvialbleSiteContentTypes(ExcelUtils.getSheetData(10, 2 ));
-			lib.clickOnaddContentType();
-			lib.clickOnAvialbleSiteContentTypes(ExcelUtils.getSheetData(9, 2 ));
+			lib.clickOnAvialbleSiteContentTypes(ExcelUtils.getSheetData(9, 2));
+			// lib.clickOnaddContentType();
+			// lib.clickOnAvialbleSiteContentTypes(ExcelUtils.getSheetData(10, 2
+			// ));
+			// lib.clickOnaddContentType();
+			// lib.clickOnAvialbleSiteContentTypes(ExcelUtils.getSheetData(9, 2
+			// ));
+			DefaultContentTypeOrderPage order = new DefaultContentTypeOrderPage();
+			order.clickOnDefaultContentTypeOrder();
+			order.okButtonOnButtonOrderPage();
+			contents.clickOnLibrary();
+			lib.uploadDocumnet();
+
+			reporter.stepPass(new Object() {
+			}.getClass().getEnclosingMethod().getName());
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			reporter.stepPass(new Object() {
+			}.getClass().getEnclosingMethod().getName());
+			// reporter.exceptionMessage(ExceptionUtils.getStackTrace(e));
+
+		}
+	}
+
+	@Then("^Verify the applied rule on column$")
+	public void Verify_the_applied_rule_on_column() throws Throwable {
+		try {
+			MIRLibraryPage lib1 = new MIRLibraryPage();
+
+			lib1.verifyElementIsEnabled();
+			String VerifyRuleOnDocument = Testcapture.capturescreenshot(Testfactory.driver, "VerifyRule");
 
 			reporter.stepPass(new Object() {
 			}.getClass().getEnclosingMethod().getName());
 
+			reporter.attachScreenshot(new Object() {
+			}.getClass().getEnclosingMethod().getName(), VerifyRuleOnDocument);
+
+		} catch (java.lang.AssertionError error) {
+			error.printStackTrace();
+			String VerifyRuleOnDocumentFail = Testcapture.capturescreenshot(Testfactory.driver, "VerifyRule");
+
+			reporter.stepFail(new Object() {
+			}.getClass().getEnclosingMethod().getName());
+			reporter.exceptionMessage(ExceptionUtils.getStackTrace(error));
+
+			reporter.attachScreenshot(new Object() {
+			}.getClass().getEnclosingMethod().getName(), VerifyRuleOnDocumentFail);
 		} catch (Exception e) {
 			e.printStackTrace();
+			String MIR_Rule_fail = Testcapture.capturescreenshot(Testfactory.driver, "MIR_Rule");
 
 			reporter.stepFail(new Object() {
 			}.getClass().getEnclosingMethod().getName());
 			reporter.exceptionMessage(ExceptionUtils.getStackTrace(e));
+
+			reporter.attachScreenshot(new Object() {
+			}.getClass().getEnclosingMethod().getName(), MIR_Rule_fail);
+
 		}
 	}
 
@@ -282,6 +398,8 @@ public class MIR {
 	public void Navigate_back_to_MIR_rule_page() throws Throwable {
 		try {
 			Testfactory.switchToNewTab(0);
+			Testfactory.driver.close();
+			Testfactory.driver.quit();
 			reporter.stepPass(new Object() {
 			}.getClass().getEnclosingMethod().getName());
 
@@ -294,5 +412,4 @@ public class MIR {
 		}
 	}
 
-	
 }

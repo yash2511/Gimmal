@@ -15,8 +15,8 @@ public class Report {
 	public void startReport() {
 		report = new ExtentReports("D:\\WorkFitComplete\\MIRProject\\ExtentsReports\\Automation.html", false);
 
-		report.loadConfig(new File(
-				"D:\\WorkFitComplete\\MIRProject\\src\\test\\resources\\Features\\ExtentReport-config.xml"));
+		report.loadConfig(
+				new File("D:\\WorkFitComplete\\MIRProject\\src\\test\\resources\\Features\\ExtentReport-config.xml"));
 
 	}
 
@@ -44,7 +44,8 @@ public class Report {
 
 	public void attachScreenshot(String stepName, String screeShotPath) {
 
-		logger.log(LogStatus.FAIL, stepName, screeShotPath);
+		logger.log(LogStatus.PASS, stepName, logger.addScreenCapture(screeShotPath));
+
 	}
 
 	public void stepSkip(String stepName) {

@@ -72,7 +72,13 @@ public class ExcelUtils {
 		String value = ExcelWSheet.getRow(row).getCell(col).getStringCellValue();
 		return value;
 	}
-
+	
+	public static double getSheetDataInteger(int row, int col) {
+		ExcelUtils.setExcelFile(0);
+		double value = ExcelWSheet.getRow(row).getCell(col).getNumericCellValue();
+		return value;
+	}
+	
 	public static String[][] getExcelData(String fileName, String sheetName) throws IOException {
 		String[][] arrayExcelData = null;
 		try {

@@ -20,8 +20,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.GimmalMIR.Utilities.TestConfig;
 
-
-
 public abstract class Testfactory {
 
 	public static WebDriver driver;
@@ -77,12 +75,11 @@ public abstract class Testfactory {
 		}
 		element.click();
 	}
-	public static void normalclickAction(WebElement ele)
-	{
-		try{
+
+	public static void normalclickAction(WebElement ele) {
+		try {
 			ele.click();
-		}catch(Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -107,7 +104,7 @@ public abstract class Testfactory {
 				String drop_down_values = allElements.get(i).getText();
 
 				if (drop_down_values.equals(leave)) {
-					System.out.println("Trying to select: " + leave);
+					// System.out.println("Trying to select: " + leave);
 					LeaveType.selectByVisibleText(leave);
 
 				}
@@ -139,7 +136,7 @@ public abstract class Testfactory {
 		}
 
 	}
-	
+
 	public static void selectWebElement(List<WebElement> element, int number) {
 		try {
 			int iSize = element.size();
@@ -147,23 +144,21 @@ public abstract class Testfactory {
 			for (int i = 0; i < iSize; i++) {
 
 				element.get(number).click();
-				}
-			
+			}
+
 			// radio.click();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
-	
+
 	public static void selectWebElement(List<WebElement> element, String value) {
-		try {		
-			
-			for (int i = 0; i < element.size(); i++)
-			{
+		try {
+
+			for (int i = 0; i < element.size(); i++) {
 				String str = element.get(i).getText();
-				if (str.contains(value)) 
-				{
+				if (str.contains(value)) {
 					element.get(i).click();
 				}
 			}
@@ -172,31 +167,29 @@ public abstract class Testfactory {
 		}
 
 	}
-	
+
 	public static void selectWebElementUsingAction(List<WebElement> element, int number) {
 		try {
 			int iSize = element.size();
 
 			for (int i = 0; i < iSize; i++) {
-				
+
 				Actions actions = new Actions(driver);
 
 				actions.moveToElement(element.get(number)).click().build().perform();
-				
-				}
-			
+
+			}
+
 			// radio.click();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-	
-
 	}
 
 	public static void wait(WebElement element) {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver,1000);
+			WebDriverWait wait = new WebDriverWait(driver, 1000);
 
 			element = wait.until(ExpectedConditions.elementToBeClickable(element));
 		} catch (Exception e) {
@@ -226,17 +219,16 @@ public abstract class Testfactory {
 		action.moveToElement(element).click().sendKeys(str).build().perform();
 
 	}
-	
+
 	public static void clickActionsUsingActionClass(WebElement element) throws AWTException {
 		Actions action = new Actions(driver);
 		action.moveToElement(element).click().build().perform();
 
 	}
-	
-	public static void Actions(String str)
-	{
+
+	public static void Actions(String str) {
 		Actions act = new Actions(driver);
-		 act.sendKeys(str).perform();
+		act.sendKeys(str).perform();
 	}
 
 	public boolean isFileDownloaded(String downloadPath, String fileName) {
@@ -301,35 +293,45 @@ public abstract class Testfactory {
 		}
 		return modelName;
 	}
-	public static void switchToNewTab(int location)
-	{
-		try{
-		ArrayList<String> tabs = new ArrayList<String> (driver.getWindowHandles());
-		driver.switchTo().window(tabs.get(location));
-	    driver.switchTo().window(tabs.toString());
-	    System.out.println(tabs);
-		}catch(Exception e){
+
+	public static void switchToNewTab(int location) {
+		try {
+			ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
+			driver.switchTo().window(tabs.get(location));
+			driver.switchTo().window(tabs.toString());
+			System.out.println(tabs);
+		} catch (Exception e) {
 		}
 	}
-		
-	
-	public static void switchToIframe(List<WebElement> frame, int frameNumber)
-	{
-		try{
-		int iSize = frame.size();
 
-	    Actions act= new Actions(driver);
-		for (int i = 0; i < iSize; i++) {
+	public static void switchToIframe(List<WebElement> frame, int frameNumber) {
+		try {
+			int iSize = frame.size();
 
-			frame.get(frameNumber).click();
+			Actions act = new Actions(driver);
+			for (int i = 0; i < iSize; i++) {
 
-			driver.switchTo().frame(0);
+				frame.get(frameNumber).click();
+
+				driver.switchTo().frame(0);
+			}
+		} catch (Exception e) {
+
 		}
-	}catch(Exception e)
-	{
-		
-	}
-		
-	}
 	}
 
+	public static void switchToIframe1(List<WebElement> frame) {
+		try {
+			int iSize = frame.size();
+
+			Actions act = new Actions(driver);
+			for (int i = 0; i < iSize; i++) {
+
+				driver.switchTo().frame(i);
+			}
+		} catch (Exception e) {
+
+		}
+
+	}
+}

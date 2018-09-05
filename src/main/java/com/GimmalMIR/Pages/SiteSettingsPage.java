@@ -14,17 +14,13 @@ public class SiteSettingsPage {
 	public SiteSettingsPage() {
 		PageFactory.initElements(Testfactory.driver, this);
 	}
-	
-	public void clickOnGovHubLink()
-	{
-		try{
+
+	public void clickOnGovHubLink() {
+		try {
 			Testfactory.clickAction(governanceHub);
-		}catch(Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}
 	}
-	
-	
-	
+
 }
